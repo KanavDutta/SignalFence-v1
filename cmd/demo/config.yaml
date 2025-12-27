@@ -1,0 +1,43 @@
+# SignalFence Demo Server Configuration
+# This configuration demonstrates different rate limits for different endpoints
+
+defaults:
+  capacity: 20           # Default: moderate limits
+  refill_rate: 1.0       # 60 req/min sustained
+  enabled: true
+
+policies:
+  # Strict limits for authentication (prevent brute force)
+  "/api/login":
+    capacity: 5
+    refill_rate: 0.083   # ~5 req/min (1 every 12 seconds)
+    enabled: true
+
+  # Lenient limits for read operations
+  "/api/search":
+    capacity: 100
+    refill_rate: 10.0    # 600 req/min
+    enabled: true
+
+  # Moderate limits for write operations
+  "/api/create":
+    capacity: 20
+    refill_rate: 0.33    # ~20 req/min (1 every 3 seconds)
+    enabled: true
+
+  "/api/update":
+    capacity: 30
+    refill_rate: 0.5     # ~30 req/min (1 every 2 seconds)
+    enabled: true
+
+  # Health check - no rate limiting
+  "/health":
+    capacity: 1000
+    refill_rate: 1000.0  # Effectively unlimited
+    enabled: false
+
+# Use IP address for rate limiting (each IP gets separate limits)
+key_extractor: "ip"
+
+# Clean up idle buckets after 30 minutes
+cleanup_age: "30m"

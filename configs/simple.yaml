@@ -1,0 +1,10 @@
+# Simple SignalFence Configuration
+# This is the most basic configuration with just defaults
+
+defaults:
+  capacity: 100          # Maximum burst size (tokens)
+  refill_rate: 10.0      # Tokens per second (600 req/min)
+  enabled: true          # Enable rate limiting
+
+key_extractor: "ip"      # Identify clients by IP address
+cleanup_age: "1h"        # Clean up idle buckets after 1 hour
